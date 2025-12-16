@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\DTO\CreateFolder;
 use App\Entity\Folder;
+use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +16,28 @@ class FolderRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Folder::class);
+    }
+
+    public function createFolder(CreateFolder $createFolder): Folder
+    {
+        $folder = new Folder()
+            ->setTitle($createFolder->title)
+            ->setDescription($createFolder->description);
+
+        $this->getEntityManager()->persist($folder);
+        $this->getEntityManager()->flush();
+
+        return $folder;
+    }
+
+    public function attachTask(Folder $folder, Task $task): Folder
+    {
+        $folder->getTasks()->add($task);
+
+        $this->getEntityManager()->persist($folder);
+        $this->getEntityManager()->flush();
+
+        return $folder;
     }
 
     //    /**
