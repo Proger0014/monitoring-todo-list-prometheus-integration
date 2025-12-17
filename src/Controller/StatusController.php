@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\CreateStatus;
+use App\Helper\StatusMapperHelper;
 use App\Repository\StatusRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +15,7 @@ final class StatusController extends AbstractController
 {
     public function __construct(
         private StatusRepository $statusRepository,
+        private StatusMapperHelper $statusMapperHelper,
     ) {
     }
 
@@ -30,6 +32,8 @@ final class StatusController extends AbstractController
     {
         $result = $this->statusRepository->findAll();
 
-        return $this->json($result);
+        $mappedResult = $this->statusMapperHelper->mapEntityListToDtoList($result);
+
+        return $this->json($mappedResult);
     }
 }
