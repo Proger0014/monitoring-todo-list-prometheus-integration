@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\DTO\CreateFolder;
+use App\Helper\FolderMapperHelper;
 use App\Repository\FolderRepository;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -17,6 +17,7 @@ final class FolderController extends AbstractController
     public function __construct(
         private readonly FolderRepository $folderRepository,
         private readonly TaskRepository $taskRepository,
+        private readonly FolderMapperHelper $folderMapperHelper,
     ) {
     }
 
@@ -25,7 +26,9 @@ final class FolderController extends AbstractController
     {
         $folders = $this->folderRepository->findAll();
 
-        return $this->json($folders);
+        $mappedFolders = $this->folderMapperHelper->mapEntityListToDtoList($folders);
+
+        return $this->json($mappedFolders);
     }
 
     #[Route('', name: 'app_folder_create', methods: ['POST'], format: 'json')]
