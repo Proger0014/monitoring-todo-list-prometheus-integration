@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\DTO\CreateTask;
+use App\Entity\Status;
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -11,9 +13,29 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TaskRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private ManagerRegistry $managerRegistry;
+
+    public function __construct(ManagerRegistry $registry, ManagerRegistry $managerRegistry)
     {
         parent::__construct($registry, Task::class);
+        $this->managerRegistry = $managerRegistry;
+    }
+
+    public function createTask(CreateTask $createTask): Task
+    {
+        /** @var StatusRepository $statusRepository */
+        $statusRepository = $this->managerRegistry->getRepository(Status::class);
+        $status = $statusRepository->findOneBy(['id' => $createTask->statusId]);
+
+        $task = new Task()
+            ->setTitle($createTask->title)
+            ->setDescription($createTask->description)
+            ->setStatus($status);
+
+        $this->getEntityManager()->persist($task);
+        $this->getEntityManager()->flush();
+
+        return $task;
     }
 
     //    /**

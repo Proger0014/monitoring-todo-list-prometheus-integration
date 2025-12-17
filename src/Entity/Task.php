@@ -28,6 +28,18 @@ class Task
     #[ORM\JoinColumn(name: 'folder_id', referencedColumnName: 'id', nullable: true)]
     private ?Folder $folder = null;
 
+    public function getFolder(): ?Folder
+    {
+        return $this->folder;
+    }
+
+    public function setFolder(?Folder $folder): self
+    {
+        $this->folder = $folder;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
