@@ -36,10 +36,10 @@ final class FolderController extends AbstractController
         return $this->json($folder);
     }
 
-    #[Route('/{folder_id}/attach/{task_id}', name: 'app_folder_attach_task', methods: ['POST'], format: 'json')]
+    #[Route('/{folderId}/attach/{taskId}', name: 'app_folder_attach_task', methods: ['POST'], format: 'json')]
     public function attachTask(
-        #[MapQueryParameter(name: 'folder_id')] int $folderId,
-        #[MapQueryParameter(name: 'task_id')] int $taskId,
+        int $folderId,
+        int $taskId,
     ): JsonResponse {
         $folder = $this->folderRepository->findOneBy(['id' => $folderId]);
         $task = $this->taskRepository->findOneBy(['id' => $taskId]);

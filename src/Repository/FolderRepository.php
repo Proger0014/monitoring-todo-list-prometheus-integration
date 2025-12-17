@@ -32,9 +32,9 @@ class FolderRepository extends ServiceEntityRepository
 
     public function attachTask(Folder $folder, Task $task): Folder
     {
-        $folder->getTasks()->add($task);
+        $task->setFolder($folder);
 
-        $this->getEntityManager()->persist($folder);
+        $this->getEntityManager()->persist($task);
         $this->getEntityManager()->flush();
 
         return $folder;

@@ -24,7 +24,9 @@ final class TaskController extends AbstractController
     {
         $tasks = $this->taskRepository->findAll();
 
-        return $this->json($tasks);
+        $tasksDto = $this->mapper->mapEntityListToListTaskDto($tasks);
+
+        return $this->json($tasksDto);
     }
 
     #[Route('', name: 'app_task_create', methods: ['POST'], format: 'json')]

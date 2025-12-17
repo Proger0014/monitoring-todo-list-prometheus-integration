@@ -29,4 +29,14 @@ readonly class TaskMapperHelper
 
         return $taskDto;
     }
+
+    /**
+     * @param list<Task> $tasks
+     *
+     * @return list<TaskDto>
+     */
+    public function mapEntityListToListTaskDto(array $tasks): array
+    {
+        return array_map([$this, 'mapToTaskDto'], $tasks);
+    }
 }
